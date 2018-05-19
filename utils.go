@@ -23,6 +23,8 @@ func GetExprType(expr ast.Expr) string {
 		return fmt.Sprintf("[]%s", GetExprType(typ.Elt))
 	case *ast.ChanType:
 		return fmt.Sprintf("chan %s", GetExprType(typ.Value))
+	case *ast.InterfaceType:
+		return fmt.Sprintf("interface{}")
 	}
 	panic(fmt.Errorf("parse expr type failed at %v: %s%+v", expr.Pos(), reflect.TypeOf(expr).String(), expr))
 }

@@ -67,7 +67,7 @@ func NewGetter(f *StructFieldDecl, s *StructDecl, options map[string]string) Gen
 	}
 	if fn == "" {
 		if f.IsPublic() {
-			fn = fmt.Sprintf("Get%s", fn)
+			fn = fmt.Sprintf("Get%s", f.Name)
 		} else {
 			fn = strings.Title(f.Name)
 		}
@@ -85,7 +85,7 @@ func NewSetter(f *StructFieldDecl, s *StructDecl, options map[string]string) Gen
 	}
 	fn, ok := options["set"]
 	if !ok {
-		log.Printf("setter not found: %v", options["set"])
+		log.Printf("setter not found: %v")
 		return &NotingGenerator{}
 	}
 	if fn == "" {

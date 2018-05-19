@@ -30,14 +30,16 @@ func (f *StructFieldDecl) IsBase() bool {
 // GetOptions :
 func (f *StructFieldDecl) GetOptions() map[string]string {
 	options := make(map[string]string)
-	for k, v := range f.Tags {
-		options[k] = v
-	}
+	if f.Tags != nil {
+		for k, v := range f.Tags {
+			options[k] = v
+		}
 
-	_, ok := f.Tags["*"]
-	if ok {
-		options["get"] = ""
-		options["set"] = ""
+		_, ok := f.Tags["*"]
+		if ok {
+			options["get"] = ""
+			options["set"] = ""
+		}
 	}
 	return options
 }

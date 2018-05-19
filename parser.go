@@ -28,7 +28,10 @@ func (p *Parser) Parse(code string, name string) error {
 		structDecl := NewStructDecl(ci, structName)
 		p.Structs[structName] = structDecl
 		for _, field := range spec.Fields.List {
-			tags := ParseTags(Config.TagName, strings.Trim(field.Tag.Value, "`"))
+			var tags map[string]string
+			if field.Tag != nil {
+				tags = ParseTags(Config.TagName, strings.Trim(field.Tag.Value, "`"))
+			}
 			fieldType := GetExprType(field.Type)
 
 			for _, field := range field.Names {
