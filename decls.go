@@ -19,18 +19,35 @@ type StructFieldDecl struct {
 	*DeclType
 	Struct *StructDecl
 	Type   string
+	Tags   map[string]string
 }
 
 // IsBase :
-func (s *StructFieldDecl) IsBase() bool {
-	return s.Name == ""
+func (f *StructFieldDecl) IsBase() bool {
+	return f.Name == ""
+}
+
+// GetOptions :
+func (f *StructFieldDecl) GetOptions() map[string]string {
+	options := make(map[string]string)
+	for k, v := range f.Tags {
+		options[k] = v
+	}
+
+	_, ok := f.Tags["*"]
+	if ok {
+		options["get"] = ""
+		options["set"] = ""
+	}
+	return options
 }
 
 // NewStructFieldDecl :
-func NewStructFieldDecl(ci *CodeInfo, s *StructDecl, name string, typ string) *StructFieldDecl {
+func NewStructFieldDecl(ci *CodeInfo, s *StructDecl, name string, typ string, tags map[string]string) *StructFieldDecl {
 	return &StructFieldDecl{
 		DeclType: NewDeclType(ci, name),
 		Struct:   s,
 		Type:     typ,
+		Tags:     tags,
 	}
 }

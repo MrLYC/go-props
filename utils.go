@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"go/ast"
+	"log"
 	"reflect"
+	"strings"
 )
 
 // GetExprType :
@@ -61,4 +63,28 @@ func GetFirstChar(s string) string {
 		return ""
 	}
 	return string(r[0])
+}
+
+// ParseTags :
+func ParseTags(key string, content string) map[string]string {
+	if key == "" {
+		return nil
+	}
+	values := make(map[string]string)
+	tag := reflect.StructTag(content)
+	value, ok := tag.Lookup(key)
+	if !ok {
+		log.Printf("lookup key %v in tag failed: %v", key, tag)
+		return nil
+	}
+	for _, opt := range strings.Split(value, ",") {
+		parts := strings.SplitN(opt, "=", 2)
+		switch len(parts) {
+		case 1:
+			values[strings.TrimSpace(parts[0])] = ""
+		case 2:
+			values[strings.TrimSpace(parts[0])] = strings.TrimSpace(parts[1])
+		}
+	}
+	return values
 }

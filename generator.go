@@ -1,12 +1,21 @@
 package main
 
 import (
+	"log"
 	"strings"
 )
 
 // Generator :
 type Generator interface {
 	Generate() string
+}
+
+// NotingGenerator :
+type NotingGenerator struct{}
+
+// Generate :
+func (g *NotingGenerator) Generate() string {
+	return ""
 }
 
 // Property :
@@ -16,10 +25,10 @@ type Property struct {
 }
 
 // NewProperty :
-func NewProperty(f *StructFieldDecl, s *StructDecl) *Property {
+func NewProperty(f *StructFieldDecl, s *StructDecl, options map[string]string) *Property {
 	return &Property{
-		Getter: NewGetter(f, s),
-		Setter: NewSetter(f, s),
+		Getter: NewGetter(f, s, options),
+		Setter: NewSetter(f, s, options),
 	}
 }
 
@@ -43,14 +52,20 @@ func (p *PropertyManager) Generate() string {
 func NewPropertyManager(parser *Parser) Generator {
 	properties := make([]*Property, 0)
 	for _, s := range parser.Structs {
-		if !Config.WithPrivateStruct && s.IsPublic() {
+		if !Config.WithPrivateStruct && !s.IsPublic() {
+			log.Printf("ignore private struct: %v", s.Name)
 			continue
 		}
 		for _, f := range s.Fields {
-			if !Config.WithPublicField && f.IsPublic() {
+			if Config.TagName != "" && f.Tags == nil {
+				log.Printf("ignore field without tag: %v", f.Name)
 				continue
 			}
-			properties = append(properties, NewProperty(f, s))
+			if !Config.WithPublicField && f.IsPublic() {
+				log.Printf("ignore public field: %v", f.Name)
+				continue
+			}
+			properties = append(properties, NewProperty(f, s, f.GetOptions()))
 		}
 	}
 	return &PropertyManager{

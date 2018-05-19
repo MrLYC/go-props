@@ -4,6 +4,8 @@ import (
 	"go/parser"
 	"go/token"
 	"io/ioutil"
+	"log"
+	"strings"
 )
 
 // Parser :
@@ -21,13 +23,17 @@ func (p *Parser) Parse(code string, name string) error {
 	}
 
 	ci := NewCodeInfo(file, code, name)
-	for name, spec := range GetGenStructDecls(file) {
-		structDecl := NewStructDecl(ci, name)
-		p.Structs[name] = structDecl
+	for structName, spec := range GetGenStructDecls(file) {
+		log.Printf("scaning struct %v", structName)
+		structDecl := NewStructDecl(ci, structName)
+		p.Structs[structName] = structDecl
 		for _, field := range spec.Fields.List {
+			tags := ParseTags(Config.TagName, strings.Trim(field.Tag.Value, "`"))
 			fieldType := GetExprType(field.Type)
-			for _, name := range field.Names {
-				structDecl.Fields[name.Name] = NewStructFieldDecl(ci, structDecl, name.Name, fieldType)
+
+			for _, field := range field.Names {
+				log.Printf("scaning struct %v field: %v %v[%+v]", structName, field.Name, fieldType, tags)
+				structDecl.Fields[field.Name] = NewStructFieldDecl(ci, structDecl, field.Name, fieldType, tags)
 			}
 		}
 	}
@@ -38,6 +44,7 @@ func (p *Parser) Parse(code string, name string) error {
 func (p *Parser) ParseFile(path string) error {
 	data, err := ioutil.ReadFile(path)
 	if err != nil {
+		log.Printf("read file error: %v", err)
 		return err
 	}
 	return p.Parse(string(data), path)

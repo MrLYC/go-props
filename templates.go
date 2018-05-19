@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"go/src/html/template"
+	"log"
 	"strings"
 )
 
@@ -54,16 +55,22 @@ func NewPropertyGenerator(f *StructFieldDecl, s *StructDecl, fn string, temp *te
 }
 
 // NewGetter :
-func NewGetter(f *StructFieldDecl, s *StructDecl) *PropertyGenerator {
+func NewGetter(f *StructFieldDecl, s *StructDecl, options map[string]string) Generator {
 	temp, err := template.New("getter").Parse(getterTemplateStr)
 	if err != nil {
 		panic(err)
 	}
 
-	fn := strings.Title(f.Name)
-	firstCahr := GetFirstChar(f.Name)
-	if strings.ToUpper(firstCahr) == firstCahr {
-		fn = fmt.Sprintf("Get%s", fn)
+	fn, ok := options["get"]
+	if !ok {
+		return &NotingGenerator{}
+	}
+	if fn == "" {
+		if f.IsPublic() {
+			fn = fmt.Sprintf("Get%s", fn)
+		} else {
+			fn = strings.Title(f.Name)
+		}
 	}
 	return NewPropertyGenerator(
 		f, s, fn, temp,
@@ -71,13 +78,21 @@ func NewGetter(f *StructFieldDecl, s *StructDecl) *PropertyGenerator {
 }
 
 // NewSetter :
-func NewSetter(f *StructFieldDecl, s *StructDecl) *PropertyGenerator {
+func NewSetter(f *StructFieldDecl, s *StructDecl, options map[string]string) Generator {
 	temp, err := template.New("setter").Parse(setterTemplateStr)
 	if err != nil {
 		panic(err)
 	}
+	fn, ok := options["set"]
+	if !ok {
+		log.Printf("setter not found: %v", options["set"])
+		return &NotingGenerator{}
+	}
+	if fn == "" {
+		fn = fmt.Sprintf("Set%s", strings.Title(f.Name))
+	}
 
 	return NewPropertyGenerator(
-		f, s, fmt.Sprintf("Set%s", f.Name), temp,
+		f, s, fn, temp,
 	)
 }
