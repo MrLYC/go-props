@@ -1,5 +1,9 @@
 package main
 
+import (
+	"strings"
+)
+
 // StructDecl :
 type StructDecl struct {
 	*DeclType
@@ -27,6 +31,12 @@ type StructFieldDecl struct {
 // IsBase :
 func (s *StructFieldDecl) IsBase() bool {
 	return s.Name == ""
+}
+
+// IsPublic :
+func (s *StructFieldDecl) IsPublic() bool {
+	firstChar := GetFirstChar(s.Name)
+	return strings.ToUpper(firstChar) == firstChar
 }
 
 // NewStructFieldDecl :
