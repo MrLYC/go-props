@@ -19,11 +19,6 @@ func main() {
 		}
 	}
 
-	for _, s := range parser.Structs {
-		fmt.Printf("%v\n", s.Name)
-		for _, f := range s.Fields {
-			fmt.Printf("%v %v\n", f.Name, f.Type)
-		}
-		fmt.Printf("\n")
-	}
+	gen := parser.Prepare()
+	fmt.Println(gen.Generate())
 }

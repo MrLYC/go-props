@@ -43,6 +43,11 @@ func (p *Parser) ParseFile(path string) error {
 	return p.Parse(string(data), path)
 }
 
+// Prepare :
+func (p *Parser) Prepare() Generator {
+	return NewPropertyManager(p)
+}
+
 // NewParser :
 func NewParser() *Parser {
 	return &Parser{
