@@ -52,7 +52,7 @@ func (p *PropertyManager) Generate() string {
 func NewPropertyManager(parser *Parser) Generator {
 	properties := make([]*Property, 0)
 	for _, s := range parser.Structs {
-		if !Config.WithPrivateStruct && !s.IsPublic() {
+		if Config.WithoutPrivateStruct && !s.IsPublic() {
 			log.Printf("ignore private struct: %v", s.Name)
 			continue
 		}
@@ -61,7 +61,7 @@ func NewPropertyManager(parser *Parser) Generator {
 				log.Printf("ignore field without tag: %v", f.Name)
 				continue
 			}
-			if !Config.WithPublicField && f.IsPublic() {
+			if Config.WithoutPublicField && f.IsPublic() {
 				log.Printf("ignore public field: %v", f.Name)
 				continue
 			}

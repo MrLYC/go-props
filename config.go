@@ -12,8 +12,8 @@ type ConfigType struct {
 
 	LineSep string
 
-	WithPrivateStruct bool
-	WithPublicField   bool
+	WithoutPrivateStruct bool
+	WithoutPublicField   bool
 
 	TagName string
 
@@ -39,8 +39,8 @@ func ParseConfig() error {
 	flag.StringVar(&file, "f", "", "file path")
 	flag.StringVar(&(Config.LineSep), "line_sep", "\n", "generate code line sep")
 
-	flag.BoolVar(&(Config.WithPrivateStruct), "with_private_struct", false, "with private struct")
-	flag.BoolVar(&(Config.WithPublicField), "with_public_field", false, "with public attributes")
+	flag.BoolVar(&(Config.WithoutPrivateStruct), "with_private_struct", false, "with private struct")
+	flag.BoolVar(&(Config.WithoutPublicField), "with_public_field", false, "with public attributes")
 
 	flag.StringVar(&(Config.TagName), "tag_name", "props", "struct property tag name")
 
