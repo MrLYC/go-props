@@ -43,8 +43,11 @@ func (p *PropertyManager) Generate() string {
 func NewPropertyManager(parser *Parser) Generator {
 	properties := make([]*Property, 0)
 	for _, s := range parser.Structs {
+		if !Config.WithPrivateStruct && s.IsPublic() {
+			continue
+		}
 		for _, f := range s.Fields {
-			if !Config.WithPublic && f.IsPublic() {
+			if !Config.WithPublicField && f.IsPublic() {
 				continue
 			}
 			properties = append(properties, NewProperty(f, s))

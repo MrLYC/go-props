@@ -8,9 +8,10 @@ import (
 
 // ConfigType : global config type
 type ConfigType struct {
-	LineSep    string
-	Files      []string
-	WithPublic bool
+	LineSep           string
+	Files             []string
+	WithPrivateStruct bool
+	WithPublicField   bool
 }
 
 // Config : global config
@@ -31,7 +32,8 @@ func ParseConfig() error {
 	flag.StringVar(&directory, "p", "", "package path")
 	flag.StringVar(&file, "f", "", "file path")
 	flag.StringVar(&(Config.LineSep), "line_sep", "\n", "generate code line sep")
-	flag.BoolVar(&(Config.WithPublic), "with_public", false, "with public attributes")
+	flag.BoolVar(&(Config.WithPrivateStruct), "with_private_struct", false, "with private struct")
+	flag.BoolVar(&(Config.WithPublicField), "with_public_field", false, "with public attributes")
 	flag.Parse()
 
 	if file != "" {
