@@ -36,7 +36,7 @@ func (p *PropertyManager) Generate() string {
 		codeList = append(codeList, property.Setter.Generate())
 		codeList = append(codeList, property.Getter.Generate())
 	}
-	return strings.Join(codeList, "\n\n")
+	return strings.Join(codeList, Config.LineSep)
 }
 
 // NewPropertyManager :

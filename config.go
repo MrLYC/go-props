@@ -8,7 +8,8 @@ import (
 
 // ConfigType : global config type
 type ConfigType struct {
-	Files []string
+	LineSep string
+	Files   []string
 }
 
 // Config : global config
@@ -28,6 +29,7 @@ func ParseConfig() error {
 	var directory, file string
 	flag.StringVar(&directory, "p", "", "package path")
 	flag.StringVar(&file, "f", "", "file path")
+	flag.StringVar(&(Config.LineSep), "linesep", "\n", "generate code line sep")
 	flag.Parse()
 
 	if file != "" {
