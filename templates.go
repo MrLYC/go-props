@@ -3,9 +3,9 @@ package main
 import (
 	"bytes"
 	"fmt"
-	"go/src/html/template"
 	"log"
 	"strings"
+	"text/template"
 )
 
 var getterTemplateStr = `
