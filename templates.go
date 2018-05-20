@@ -85,7 +85,7 @@ func NewSetter(f *StructFieldDecl, s *StructDecl, options map[string]string) Gen
 	}
 	fn, ok := options["set"]
 	if !ok {
-		log.Printf("setter not found: %v")
+		log.Printf("setter not found: %v", f.Name)
 		return &NotingGenerator{}
 	}
 	if fn == "" {

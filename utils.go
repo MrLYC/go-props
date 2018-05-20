@@ -8,23 +8,65 @@ import (
 	"strings"
 )
 
-// GetExprType :
-func GetExprType(expr ast.Expr) string {
+// GetChanTypeLit :
+func GetChanTypeLit(t *ast.ChanType) string {
+	chType := GetExprTypeLit(t.Value)
+	switch t.Dir {
+	case ast.SEND:
+		return fmt.Sprintf("chan<- %s", chType)
+	case ast.RECV:
+		return fmt.Sprintf("<-chan %s", chType)
+	}
+	return fmt.Sprintf("chan %s", chType)
+}
+
+// GetFuncTypeLit :
+func GetFuncTypeLit(t *ast.FuncType) string {
+	params := make([]string, 0)
+	if t.Params != nil {
+		for _, p := range t.Params.List {
+			params = append(params, GetExprTypeLit(p.Type))
+		}
+	}
+
+	results := make([]string, 0)
+	if t.Results != nil {
+		for _, r := range t.Results.List {
+			results = append(results, GetExprTypeLit(r.Type))
+		}
+	}
+
+	paramsLit := strings.Join(params, ", ")
+	resultsLit := strings.Join(results, ", ")
+	switch len(results) {
+	case 0:
+		return fmt.Sprintf("func (%v)", paramsLit)
+	case 1:
+		return fmt.Sprintf("func (%v) %v", paramsLit, resultsLit)
+	default:
+		return fmt.Sprintf("func (%v) (%v)", paramsLit, resultsLit)
+	}
+}
+
+// GetExprTypeLit :
+func GetExprTypeLit(expr ast.Expr) string {
 	switch typ := expr.(type) {
 	case *ast.Ident:
 		return typ.Name
 	case *ast.StarExpr:
-		return fmt.Sprintf("*%s", GetExprType(typ.X))
+		return fmt.Sprintf("*%s", GetExprTypeLit(typ.X))
 	case *ast.SelectorExpr:
 		return fmt.Sprintf("%s.%s", typ.X, typ.Sel)
 	case *ast.MapType:
-		return fmt.Sprintf("map[%s]%s", typ.Key, GetExprType(typ.Value))
+		return fmt.Sprintf("map[%s]%s", typ.Key, GetExprTypeLit(typ.Value))
 	case *ast.ArrayType:
-		return fmt.Sprintf("[]%s", GetExprType(typ.Elt))
+		return fmt.Sprintf("[]%s", GetExprTypeLit(typ.Elt))
 	case *ast.ChanType:
-		return fmt.Sprintf("chan %s", GetExprType(typ.Value))
+		return GetChanTypeLit(typ)
 	case *ast.InterfaceType:
 		return fmt.Sprintf("interface{}")
+	case *ast.FuncType:
+		return GetFuncTypeLit(typ)
 	}
 	panic(fmt.Errorf("parse expr type failed at %v: %s%+v", expr.Pos(), reflect.TypeOf(expr).String(), expr))
 }

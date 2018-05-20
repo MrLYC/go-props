@@ -1,5 +1,9 @@
 package testdata
 
+import (
+	"go/ast"
+)
+
 type B struct{}
 
 type T struct {
@@ -14,7 +18,9 @@ type T struct {
 	namedSetter string `props:"set=SetNamedSetter,get=GetNamedSetter"`
 	namedGetter string `props:"set=SetNamedGetter,get=GetNamedGetter"`
 
-	chanType chan string `props:"*"`
+	chanType          chan string   `props:"*"`
+	chanReadOnlyType  <-chan string `props:"*"`
+	chanWriteOnlyType chan<- string `props:"*"`
 
 	arrType     []string  `props:"*"`
 	arrStarType []*string `props:"*"`
@@ -25,4 +31,13 @@ type T struct {
 	structStarType *B `props:"*"`
 
 	interfaceType interface{} `props:"*"`
+
+	emptyFuncType   func()                          `props:"*"`
+	paramFuncType   func(int)                       `props:"*"`
+	resultFuncType  func() int                      `props:"*"`
+	resultsFuncType func() (int, string)            `props:"*"`
+	fullFuncType    func(int, string) (int, string) `props:"*"`
+
+	selectorType     ast.SelectorExpr  `props:"*"`
+	selectorStarType *ast.SelectorExpr `props:"*"`
 }

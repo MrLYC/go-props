@@ -32,7 +32,7 @@ func (p *Parser) Parse(code string, name string) error {
 			if field.Tag != nil {
 				tags = ParseTags(Config.TagName, strings.Trim(field.Tag.Value, "`"))
 			}
-			fieldType := GetExprType(field.Type)
+			fieldType := GetExprTypeLit(field.Type)
 
 			for _, field := range field.Names {
 				log.Printf("scaning struct %v field: %v %v[%+v]", structName, field.Name, fieldType, tags)
