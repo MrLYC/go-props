@@ -6,4 +6,6 @@ var (
 	GetterTag           = "get"
 	AutoSetterGetterTag = "*"
 	DisableTag          = "-"
+	FromTag             = "from"
+	ToTag               = "to"
 )

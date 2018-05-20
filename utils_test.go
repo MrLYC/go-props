@@ -16,8 +16,9 @@ type T struct {
 	f func(int)(T, error)
 }
 
-func (fffff *T)Test(value int) (data T, error) {
-
+// Test : 22222
+func (fffff *T)Test(value int) (data T, error) { // test11111 
+	return T{}, nil
 }
 		`, 0)
 	ast.Print(fset, f)

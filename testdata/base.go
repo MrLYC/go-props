@@ -44,6 +44,10 @@ type T struct {
 	setterEx string `props:"set=SetEx,get"`
 	getterEx string `props:"set,get=GetEx"`
 	bothEx   string `props:"set=SetEx,get=GetEx"`
+
+	toPtr   string `props:"*,to=x"`
+	fromPtr string `props:"*,from=x"`
+	asPtr   string `props:"*,to=x,from=x"`
 }
 
 func (t *T) SetEx(v string) {

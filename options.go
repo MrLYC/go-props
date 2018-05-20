@@ -13,6 +13,15 @@ type PropsOptions struct {
 	Tags    map[string]string
 }
 
+// MustGet :
+func (p *PropsOptions) MustGet(key string) string {
+	v, ok := p.Get(key)
+	if !ok {
+		panic(ErrNotFound)
+	}
+	return v
+}
+
 // Get :
 func (p *PropsOptions) Get(key string) (string, bool) {
 	if p.IsValid() {
@@ -63,6 +72,8 @@ func NewPropsOptions(f *StructFieldDecl, tags map[string]string) *PropsOptions {
 		Tags: map[string]string{
 			SetterTag: DisableTag,
 			GetterTag: DisableTag,
+			FromTag:   "",
+			ToTag:     "",
 		},
 	}
 	if tags != nil {
