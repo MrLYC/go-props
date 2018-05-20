@@ -37,7 +37,7 @@ func ParseConfig() error {
 	var directory, file string
 	flag.StringVar(&directory, "p", "", "package path")
 	flag.StringVar(&file, "f", "", "file path")
-	flag.StringVar(&(Config.LineSep), "line_sep", "\n", "generate code line sep")
+	flag.StringVar(&(Config.LineSep), "line_sep", "", "generate code line sep")
 
 	flag.BoolVar(&(Config.WithoutPrivateStruct), "with_private_struct", false, "with private struct")
 	flag.BoolVar(&(Config.WithoutPublicField), "with_public_field", false, "with public attributes")

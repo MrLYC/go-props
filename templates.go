@@ -9,16 +9,12 @@ import (
 
 var getterTemplateStr = `
 // {{.FuncName}} return {{.FieldName}}
-func ({{.Receiver}} *{{.StructName}}) {{.FuncName}}() {{.ToTypePrefix}}{{.FieldType}} {
-	return {{.XToTypePrefix}}{{.Receiver}}.{{.FieldName}}
-}
+func ({{.Receiver}} *{{.StructName}}) {{.FuncName}}() {{.ToTypePrefix}}{{.FieldType}} { return {{.XToTypePrefix}}{{.Receiver}}.{{.FieldName}} }
 `
 
 var setterTemplateStr = `
 // {{.FuncName}} set {{.FieldName}}
-func ({{.Receiver}} *{{.StructName}}) {{.FuncName}}(value {{.FromTypePrefix}}{{.FieldType}}) {
-	{{.Receiver}}.{{.FieldName}} = {{.XFromTypePrefix}}value
-}
+func ({{.Receiver}} *{{.StructName}}) {{.FuncName}}(value {{.FromTypePrefix}}{{.FieldType}}) { {{.Receiver}}.{{.FieldName}} = {{.FromTypePrefix}}value }
 `
 
 // PropertyGenerator :
