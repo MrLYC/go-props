@@ -6,7 +6,7 @@ import (
 	"go/token"
 	"io/ioutil"
 	"log"
-	"strings"
+	"strconv"
 )
 
 // Parser :
@@ -22,7 +22,11 @@ func (p *Parser) parseStructDecl(ci *CodeInfo, structName string, spec *ast.Stru
 	for _, field := range spec.Fields.List {
 		var tags map[string]string
 		if field.Tag != nil {
-			tags = ParseTags(Config.TagName, strings.Trim(field.Tag.Value, "`"))
+			tag, err := strconv.Unquote(field.Tag.Value)
+			if err != nil {
+				return err
+			}
+			tags = ParseTags(Config.TagName, tag)
 		}
 		fieldType := GetExprTypeLit(field.Type)
 
