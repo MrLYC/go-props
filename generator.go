@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"strings"
 )
@@ -40,19 +41,25 @@ type PropertyManager struct {
 
 // Generate :
 func (p *PropertyManager) Generate() string {
+	var code string
 	codeList := make([]string, 0)
+	if Config.Package != "" {
+		codeList = append(codeList, fmt.Sprintf("package %v\n", Config.Package))
+	}
 	for _, property := range p.Properties {
 		codes := []string{
 			property.Setter.Generate(),
 			property.Getter.Generate(),
 		}
-		for _, code := range codes {
+		for _, code = range codes {
 			if code != "" {
 				codeList = append(codeList, code)
 			}
 		}
 	}
-	return strings.Join(codeList, Config.LineSep)
+	code = strings.Join(codeList, Config.LineSep)
+
+	return code
 }
 
 // NewPropertyManager :

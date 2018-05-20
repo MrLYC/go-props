@@ -10,6 +10,7 @@ import (
 type ConfigType struct {
 	Files []string
 
+	Package string
 	LineSep string
 
 	WithoutPrivateStruct bool
@@ -37,6 +38,8 @@ func ParseConfig() error {
 	var directory, file string
 	flag.StringVar(&directory, "p", "", "package path")
 	flag.StringVar(&file, "f", "", "file path")
+
+	flag.StringVar(&(Config.Package), "with_package", "", "with package")
 	flag.StringVar(&(Config.LineSep), "line_sep", "", "generate code line sep")
 
 	flag.BoolVar(&(Config.WithoutPrivateStruct), "with_private_struct", false, "with private struct")
