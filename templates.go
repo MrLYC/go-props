@@ -2,7 +2,6 @@ package main
 
 import (
 	"bytes"
-	"fmt"
 	"log"
 	"strings"
 	"text/template"
@@ -34,6 +33,12 @@ type PropertyGenerator struct {
 
 // Generate :
 func (p *PropertyGenerator) Generate() string {
+	Assert(p.StructName != "")
+	Assert(p.FieldName != "")
+	Assert(p.Receiver != "")
+	Assert(p.FuncName != "")
+	Assert(p.FieldType != "")
+
 	var buffer bytes.Buffer
 	err := p.template.Execute(&buffer, p)
 	if err != nil {
@@ -55,22 +60,16 @@ func NewPropertyGenerator(f *StructFieldDecl, s *StructDecl, fn string, temp *te
 }
 
 // NewGetter :
-func NewGetter(f *StructFieldDecl, s *StructDecl, options map[string]string) Generator {
+func NewGetter(f *StructFieldDecl, s *StructDecl, options *PropsOptions) Generator {
 	temp, err := template.New("getter").Parse(getterTemplateStr)
 	if err != nil {
 		panic(err)
 	}
 
-	fn, ok := options["get"]
+	fn, ok := options.Get("get")
 	if !ok {
+		log.Printf("getter not found: %v", f.Name)
 		return &NotingGenerator{}
-	}
-	if fn == "" {
-		if f.IsPublic() {
-			fn = fmt.Sprintf("Get%s", f.Name)
-		} else {
-			fn = strings.Title(f.Name)
-		}
 	}
 	return NewPropertyGenerator(
 		f, s, fn, temp,
@@ -78,18 +77,15 @@ func NewGetter(f *StructFieldDecl, s *StructDecl, options map[string]string) Gen
 }
 
 // NewSetter :
-func NewSetter(f *StructFieldDecl, s *StructDecl, options map[string]string) Generator {
+func NewSetter(f *StructFieldDecl, s *StructDecl, options *PropsOptions) Generator {
 	temp, err := template.New("setter").Parse(setterTemplateStr)
 	if err != nil {
 		panic(err)
 	}
-	fn, ok := options["set"]
+	fn, ok := options.Get("get")
 	if !ok {
 		log.Printf("setter not found: %v", f.Name)
 		return &NotingGenerator{}
-	}
-	if fn == "" {
-		fn = fmt.Sprintf("Set%s", strings.Title(f.Name))
 	}
 
 	return NewPropertyGenerator(

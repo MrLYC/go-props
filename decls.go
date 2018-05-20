@@ -17,9 +17,9 @@ func NewStructDecl(ci *CodeInfo, name string) *StructDecl {
 // StructFieldDecl :
 type StructFieldDecl struct {
 	*DeclType
-	Struct *StructDecl
-	Type   string
-	Tags   map[string]string
+	Struct  *StructDecl
+	Type    string
+	Options *PropsOptions
 }
 
 // IsBase :
@@ -27,29 +27,13 @@ func (f *StructFieldDecl) IsBase() bool {
 	return f.Name == ""
 }
 
-// GetOptions :
-func (f *StructFieldDecl) GetOptions() map[string]string {
-	options := make(map[string]string)
-	if f.Tags != nil {
-		for k, v := range f.Tags {
-			options[k] = v
-		}
-
-		_, ok := f.Tags["*"]
-		if ok {
-			options["get"] = ""
-			options["set"] = ""
-		}
-	}
-	return options
-}
-
 // NewStructFieldDecl :
 func NewStructFieldDecl(ci *CodeInfo, s *StructDecl, name string, typ string, tags map[string]string) *StructFieldDecl {
-	return &StructFieldDecl{
+	f := &StructFieldDecl{
 		DeclType: NewDeclType(ci, name),
 		Struct:   s,
 		Type:     typ,
-		Tags:     tags,
 	}
+	f.Options = NewPropsOptions(f, tags)
+	return f
 }

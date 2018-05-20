@@ -25,7 +25,7 @@ type Property struct {
 }
 
 // NewProperty :
-func NewProperty(f *StructFieldDecl, s *StructDecl, options map[string]string) *Property {
+func NewProperty(f *StructFieldDecl, s *StructDecl, options *PropsOptions) *Property {
 	return &Property{
 		Getter: NewGetter(f, s, options),
 		Setter: NewSetter(f, s, options),
@@ -57,15 +57,15 @@ func NewPropertyManager(parser *Parser) Generator {
 			continue
 		}
 		for _, f := range s.Fields {
-			if Config.TagName != "" && f.Tags == nil {
-				log.Printf("ignore field without tag: %v", f.Name)
+			if Config.TagName != "" && !f.Options.IsValid() {
+				log.Printf("ignore field with invalid options: %v", f.Name)
 				continue
 			}
 			if Config.WithoutPublicField && f.IsPublic() {
 				log.Printf("ignore public field: %v", f.Name)
 				continue
 			}
-			properties = append(properties, NewProperty(f, s, f.GetOptions()))
+			properties = append(properties, NewProperty(f, s, f.Options))
 		}
 	}
 	return &PropertyManager{

@@ -8,6 +8,13 @@ import (
 	"strings"
 )
 
+// Assert :
+func Assert(value bool) {
+	if !value {
+		panic(ErrAssert)
+	}
+}
+
 // GetChanTypeLit :
 func GetChanTypeLit(t *ast.ChanType) string {
 	chType := GetExprTypeLit(t.Value)
