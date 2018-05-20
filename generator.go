@@ -25,10 +25,10 @@ type Property struct {
 }
 
 // NewProperty :
-func NewProperty(f *StructFieldDecl, s *StructDecl, options *PropsOptions) *Property {
+func NewProperty(f *StructFieldDecl, s *StructDecl) *Property {
 	return &Property{
-		Getter: NewGetter(f, s, options),
-		Setter: NewSetter(f, s, options),
+		Getter: NewGetter(f, s),
+		Setter: NewSetter(f, s),
 	}
 }
 
@@ -42,8 +42,15 @@ type PropertyManager struct {
 func (p *PropertyManager) Generate() string {
 	codeList := make([]string, 0)
 	for _, property := range p.Properties {
-		codeList = append(codeList, property.Setter.Generate())
-		codeList = append(codeList, property.Getter.Generate())
+		codes := []string{
+			property.Setter.Generate(),
+			property.Getter.Generate(),
+		}
+		for _, code := range codes {
+			if code != "" {
+				codeList = append(codeList, code)
+			}
+		}
 	}
 	return strings.Join(codeList, Config.LineSep)
 }
@@ -65,7 +72,8 @@ func NewPropertyManager(parser *Parser) Generator {
 				log.Printf("ignore public field: %v", f.Name)
 				continue
 			}
-			properties = append(properties, NewProperty(f, s, f.Options))
+			property := NewProperty(f, s)
+			properties = append(properties, property)
 		}
 	}
 	return &PropertyManager{

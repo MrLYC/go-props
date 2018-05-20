@@ -16,7 +16,7 @@ type T struct {
 	f func(int)(T, error)
 }
 
-func New(value int) (data T, error) {
+func (fffff *T)Test(value int) (data T, error) {
 
 }
 		`, 0)

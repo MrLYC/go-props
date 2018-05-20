@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"strings"
 )
 
@@ -28,26 +29,28 @@ func (p *PropsOptions) IsValid() bool {
 
 // Init :
 func (p *PropsOptions) Init() {
-	_, ok := p.Tags["*"]
+	_, ok := p.Tags[AutoSetterGetterTag]
 	if ok {
-		p.Tags["get"] = ""
-		p.Tags["set"] = ""
+		p.Tags[GetterTag] = ""
+		p.Tags[SetterTag] = ""
 	}
 	p.initGetOpt()
+	log.Printf("%v.%v getter: %v", p.field.Struct.Name, p.field.Name, p.Tags[GetterTag])
 	p.initSetOpt()
+	log.Printf("%v.%v setter: %v", p.field.Struct.Name, p.field.Name, p.Tags[SetterTag])
 }
 func (p *PropsOptions) initSetOpt() {
-	if p.Tags["set"] == "" {
-		p.Tags["set"] = fmt.Sprintf("Set%s", strings.Title(p.field.Name))
+	if p.Tags[SetterTag] == "" {
+		p.Tags[SetterTag] = fmt.Sprintf("Set%s", strings.Title(p.field.Name))
 	}
 }
 
 func (p *PropsOptions) initGetOpt() {
-	if p.Tags["get"] == "" {
+	if p.Tags[GetterTag] == "" {
 		if p.field.IsPublic() {
-			p.Tags["get"] = fmt.Sprintf("Get%s", p.field.Name)
+			p.Tags[GetterTag] = fmt.Sprintf("Get%s", p.field.Name)
 		} else {
-			p.Tags["get"] = strings.Title(p.field.Name)
+			p.Tags[GetterTag] = strings.Title(p.field.Name)
 		}
 	}
 }
@@ -57,7 +60,10 @@ func NewPropsOptions(f *StructFieldDecl, tags map[string]string) *PropsOptions {
 	opt := &PropsOptions{
 		isValid: false,
 		field:   f,
-		Tags:    make(map[string]string),
+		Tags: map[string]string{
+			SetterTag: DisableTag,
+			GetterTag: DisableTag,
+		},
 	}
 	if tags != nil {
 		opt.isValid = true

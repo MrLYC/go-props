@@ -60,15 +60,19 @@ func NewPropertyGenerator(f *StructFieldDecl, s *StructDecl, fn string, temp *te
 }
 
 // NewGetter :
-func NewGetter(f *StructFieldDecl, s *StructDecl, options *PropsOptions) Generator {
+func NewGetter(f *StructFieldDecl, s *StructDecl) Generator {
 	temp, err := template.New("getter").Parse(getterTemplateStr)
 	if err != nil {
 		panic(err)
 	}
 
-	fn, ok := options.Get("get")
-	if !ok {
-		log.Printf("getter not found: %v", f.Name)
+	fn, ok := f.Options.Get(GetterTag)
+	if !ok || fn == DisableTag {
+		log.Printf("getter not set: %v", f.Name)
+		return &NotingGenerator{}
+	}
+	if f.IsGetterFound() {
+		log.Printf("%v.%v getter has been declared", f.Struct.Name, f.Name)
 		return &NotingGenerator{}
 	}
 	return NewPropertyGenerator(
@@ -77,17 +81,20 @@ func NewGetter(f *StructFieldDecl, s *StructDecl, options *PropsOptions) Generat
 }
 
 // NewSetter :
-func NewSetter(f *StructFieldDecl, s *StructDecl, options *PropsOptions) Generator {
+func NewSetter(f *StructFieldDecl, s *StructDecl) Generator {
 	temp, err := template.New("setter").Parse(setterTemplateStr)
 	if err != nil {
 		panic(err)
 	}
-	fn, ok := options.Get("get")
-	if !ok {
-		log.Printf("setter not found: %v", f.Name)
+	fn, ok := f.Options.Get(SetterTag)
+	if !ok || fn == DisableTag {
+		log.Printf("setter not set: %v", f.Name)
 		return &NotingGenerator{}
 	}
-
+	if f.IsSetterFound() {
+		log.Printf("%v.%v setter has been declared", f.Struct.Name, f.Name)
+		return &NotingGenerator{}
+	}
 	return NewPropertyGenerator(
 		f, s, fn, temp,
 	)

@@ -78,6 +78,18 @@ func GetExprTypeLit(expr ast.Expr) string {
 	panic(fmt.Errorf("parse expr type failed at %v: %s%+v", expr.Pos(), reflect.TypeOf(expr).String(), expr))
 }
 
+// GetFuncDecls :
+func GetFuncDecls(astFile *ast.File) []*ast.FuncDecl {
+	decls := make([]*ast.FuncDecl, 0)
+	for _, d := range astFile.Decls {
+		switch decl := d.(type) {
+		case *ast.FuncDecl:
+			decls = append(decls, decl)
+		}
+	}
+	return decls
+}
+
 // GetGenDecls :
 func GetGenDecls(astFile *ast.File) []*ast.GenDecl {
 	decls := make([]*ast.GenDecl, 0)
@@ -102,6 +114,28 @@ func GetGenStructDecls(astFile *ast.File) map[string]*ast.StructType {
 					decls[spec.Name.Name] = specType
 				}
 			}
+		}
+	}
+	return decls
+}
+
+// GetStructMethodDecls :
+func GetStructMethodDecls(astFile *ast.File) map[string][]*ast.FuncDecl {
+	decls := make(map[string][]*ast.FuncDecl)
+	for _, d := range GetFuncDecls(astFile) {
+		if d.Recv == nil {
+			continue
+		}
+		for _, r := range d.Recv.List {
+			typ := GetExprTypeLit(r.Type)
+			if GetFirstChar(typ) == "*" {
+				typ = typ[1:]
+			}
+			methods, ok := decls[typ]
+			if !ok {
+				methods = make([]*ast.FuncDecl, 0)
+			}
+			decls[typ] = append(methods, d)
 		}
 	}
 	return decls

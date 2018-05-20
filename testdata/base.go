@@ -40,4 +40,16 @@ type T struct {
 
 	selectorType     ast.SelectorExpr  `props:"*"`
 	selectorStarType *ast.SelectorExpr `props:"*"`
+
+	setterEx string `props:"set=SetEx,get"`
+	getterEx string `props:"set,get=GetEx"`
+	bothEx   string `props:"set=SetEx,get=GetEx"`
+}
+
+func (t *T) SetEx(v string) {
+
+}
+
+func (t T) GetEx() string {
+	return ""
 }
