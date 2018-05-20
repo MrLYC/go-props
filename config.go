@@ -17,7 +17,7 @@ type ConfigType struct {
 
 	TagName string
 
-	LogDisabled bool
+	WithLog bool
 }
 
 // Config : global config
@@ -44,7 +44,8 @@ func ParseConfig() error {
 
 	flag.StringVar(&(Config.TagName), "tag_name", "props", "struct property tag name")
 
-	flag.BoolVar(&(Config.LogDisabled), "log_disabled", false, "disable logger")
+	flag.BoolVar(&(Config.WithLog), "v", false, "with log")
+	flag.BoolVar(&(Config.WithLog), "with_log", false, "with log")
 
 	flag.Parse()
 

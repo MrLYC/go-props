@@ -10,14 +10,14 @@ import (
 func main() {
 	var err error
 
-	log.SetOutput(os.Stderr)
+	log.SetOutput(ioutil.Discard)
 	err = ParseConfig()
 	if err != nil {
 		log.Panic(err)
 	}
 
-	if Config.LogDisabled {
-		log.SetOutput(ioutil.Discard)
+	if Config.WithLog {
+		log.SetOutput(os.Stderr)
 	}
 
 	parser := NewParser()
