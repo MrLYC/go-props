@@ -2,13 +2,17 @@ package main
 
 import (
 	"flag"
+	"io"
 	"io/ioutil"
+	"log"
+	"os"
 	"path/filepath"
 )
 
 // ConfigType : global config type
 type ConfigType struct {
 	Files []string
+	Stdin bool
 
 	Package string
 	LineSep string
@@ -39,6 +43,9 @@ func ParseConfig() error {
 	flag.StringVar(&directory, "p", "", "package path")
 	flag.StringVar(&file, "f", "", "file path")
 
+	var stdin bool
+	flag.BoolVar(&stdin, "stdin", false, "from stdin")
+
 	flag.StringVar(&(Config.Package), "with_package", "", "with package")
 	flag.StringVar(&(Config.LineSep), "line_sep", "", "generate code line sep")
 
@@ -58,6 +65,25 @@ func ParseConfig() error {
 			return err
 		}
 		Config.Files = append(Config.Files, file)
+	}
+
+	if stdin {
+		tempFile, err := ioutil.TempFile("", "props")
+		if err != nil {
+			return err
+		}
+		_, err = io.Copy(tempFile, os.Stdin)
+		if err != nil {
+			return err
+		}
+
+		err = tempFile.Sync()
+		if err != nil {
+			return err
+		}
+
+		log.Printf("tempfile: %v", tempFile.Name())
+		Config.Files = append(Config.Files, tempFile.Name())
 	}
 
 	if directory != "" {
