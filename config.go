@@ -28,9 +28,9 @@ type ConfigType struct {
 // Config : global config
 var Config ConfigType
 
-func toAvaliableGoFile(f string) (string, error) {
+func toAvaliableGoFile(f string, force bool) (string, error) {
 	ext := filepath.Ext(f)
-	if ext != ".go" {
+	if ext != ".go" && !force {
 		return "", ErrNotGoFile
 	}
 	file, err := filepath.Abs(f)
@@ -60,7 +60,7 @@ func ParseConfig() error {
 	flag.Parse()
 
 	if file != "" {
-		file, err := toAvaliableGoFile(file)
+		file, err := toAvaliableGoFile(file, true)
 		if err != nil {
 			return err
 		}
@@ -95,7 +95,7 @@ func ParseConfig() error {
 			if f.IsDir() {
 				continue
 			}
-			file, err = toAvaliableGoFile(filepath.Join(directory, f.Name()))
+			file, err = toAvaliableGoFile(filepath.Join(directory, f.Name()), false)
 			if err == ErrNotGoFile {
 				continue
 			} else if err != nil {
