@@ -10,15 +10,10 @@ import (
 func TestFuncType(t *testing.T) {
 	fset := token.NewFileSet()
 	f, _ := parser.ParseFile(fset, "", `
-package main
+package simba
 
 type T struct {
-	f func(int)(T, error)
-}
-
-// Test : 22222
-func (fffff *T)Test(value int) (data T, error) { // test11111 
-	return T{}, nil
+	value map[*string]*int "props:\"+\""
 }
 		`, 0)
 	ast.Print(fset, f)

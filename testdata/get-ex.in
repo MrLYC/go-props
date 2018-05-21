@@ -1,0 +1,9 @@
+package simba
+
+type T struct {
+	value string `props:"set,get=GetEx"`
+}
+
+func (t *T) GetEx(v string) {
+
+}

@@ -1,0 +1,5 @@
+// SetValue set value
+func (t *T) SetValue(value string) { t.value = value }
+
+// Get return value
+func (t *T) Get() string { return t.value }

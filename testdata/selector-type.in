@@ -1,0 +1,7 @@
+package simba
+
+import "go/ast"
+
+type T struct {
+	value ast.SelectorExpr `props:"+"`
+}

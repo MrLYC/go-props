@@ -1,0 +1,5 @@
+// SetValue set value
+func (t *T) SetValue(value chan<- string) { t.value = value }
+
+// Value return value
+func (t *T) Value() chan<- string { return t.value }

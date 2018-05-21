@@ -1,0 +1,5 @@
+// SetPublic set Public
+func (t *T) SetPublic(value string) { t.Public = value }
+
+// GetPublic return Public
+func (t *T) GetPublic() string { return t.Public }

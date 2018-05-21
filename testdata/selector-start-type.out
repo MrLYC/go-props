@@ -1,0 +1,5 @@
+// SetValue set value
+func (t *T) SetValue(value *ast.SelectorExpr) { t.value = value }
+
+// Value return value
+func (t *T) Value() *ast.SelectorExpr { return t.value }

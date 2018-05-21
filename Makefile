@@ -5,6 +5,7 @@ APPNAME = go-props
 GODIR = /tmp/gopath
 SRCDIR = ${GODIR}/src/${APPNAME}
 TARGET = bin/${APPNAME}
+TESTDATA = testdata
 
 GOENV = GOPATH=${GODIR}:${GOPATH} GO15VENDOREXPERIMENT=1
 
@@ -12,16 +13,10 @@ GO = ${GOENV} go
 DEP = ${GOENV} dep
 
 LDFLAGS = 
-DEBUGLDFLAGS = 
-RELEASELDFLAGS = 
-
-.PHONY: release
-release: ${SRCDIR}
-	${GO} build -i -ldflags="${RELEASELDFLAGS}" -o ${TARGET} ${APPNAME}
 
 .PHONY: build
 build: ${SRCDIR}
-	${GO} build -i -ldflags="${DEBUGLDFLAGS}" -o ${TARGET} ${APPNAME}
+	${GO} build -i -ldflags="${LDFLAGS}" -o ${TARGET} ${APPNAME}
 
 ${SRCDIR}:
 	mkdir -p bin
@@ -36,9 +31,8 @@ update: ${SRCDIR}
 	cd ${SRCDIR} && ${DEP} ensure || true
 
 .PHONY: test
-test: ${SRCDIR}
-	$(eval package ?= $(patsubst ./%,${APPNAME}/%,$(shell find "." -name "*_test.go" -not -path "./vendor/*" -not -path "./.*" -exec dirname {} \; | uniq)))
-	${GOENV} go test ${package}
+test: ${SRCDIR} build
+	python ${TESTDATA}/driven.py -v
 
 .PHONY: lint
 lint:

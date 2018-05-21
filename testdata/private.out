@@ -1,0 +1,5 @@
+// SetPrivate set private
+func (t *T) SetPrivate(value string) { t.private = value }
+
+// Private return private
+func (t *T) Private() string { return t.private }

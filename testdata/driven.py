@@ -41,7 +41,7 @@ class TestParser(unittest.TestCase):
             if not (in_ and out):
                 continue
 
-            self.assertEqual(self.gen_code(in_), self.read_code(out))
+            self.assertEqual(self.gen_code(in_), self.read_code(out), in_)
             self.check_build(in_, out)
 
 

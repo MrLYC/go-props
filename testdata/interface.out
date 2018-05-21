@@ -1,0 +1,5 @@
+// SetValue set value
+func (t *T) SetValue(value interface{}) { t.value = value }
+
+// Value return value
+func (t *T) Value() interface{} { return t.value }

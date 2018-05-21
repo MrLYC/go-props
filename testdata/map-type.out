@@ -1,0 +1,5 @@
+// SetValue set value
+func (t *T) SetValue(value map[string]int) { t.value = value }
+
+// Value return value
+func (t *T) Value() map[string]int { return t.value }

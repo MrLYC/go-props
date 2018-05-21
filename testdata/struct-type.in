@@ -1,0 +1,7 @@
+package simba
+
+type B struct {}
+
+type T struct {
+	value B `props:"+"`
+}

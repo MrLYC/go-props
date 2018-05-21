@@ -13,3 +13,5 @@
 bin/
 src/
 pkg/
+
+.vscode/

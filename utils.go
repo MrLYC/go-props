@@ -65,7 +65,7 @@ func GetExprTypeLit(expr ast.Expr) string {
 	case *ast.SelectorExpr:
 		return fmt.Sprintf("%s.%s", typ.X, typ.Sel)
 	case *ast.MapType:
-		return fmt.Sprintf("map[%s]%s", typ.Key, GetExprTypeLit(typ.Value))
+		return fmt.Sprintf("map[%s]%s", GetExprTypeLit(typ.Key), GetExprTypeLit(typ.Value))
 	case *ast.ArrayType:
 		return fmt.Sprintf("[]%s", GetExprTypeLit(typ.Elt))
 	case *ast.ChanType:

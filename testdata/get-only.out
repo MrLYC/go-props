@@ -1,0 +1,2 @@
+// Value return value
+func (t *T) Value() string { return t.value }

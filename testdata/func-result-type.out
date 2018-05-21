@@ -1,0 +1,5 @@
+// SetValue set value
+func (t *T) SetValue(value func () int) { t.value = value }
+
+// Value return value
+func (t *T) Value() func () int { return t.value }

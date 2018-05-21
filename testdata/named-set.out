@@ -1,0 +1,2 @@
+// Set set value
+func (t *T) Set(value string) { t.value = value }
