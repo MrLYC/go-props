@@ -4,7 +4,7 @@ package main
 var (
 	SetterTag           = "set"
 	GetterTag           = "get"
-	AutoSetterGetterTag = "*"
+	AutoSetterGetterTag = "+"
 	DisableTag          = "-"
 	FromTag             = "from"
 	ToTag               = "to"
