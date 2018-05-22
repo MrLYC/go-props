@@ -1,4 +1,4 @@
-![logo](https://cdn.rawgit.com/MrLYC/go-props/master/logo/default.svg)
+[![logo](https://cdn.rawgit.com/MrLYC/go-props/master/logo/default.svg)](https://travis-ci.org/MrLYC/go-props)
 
 # go-props
 [![Build Status](https://travis-ci.org/MrLYC/go-props.svg?branch=master)](https://travis-ci.org/MrLYC/go-props)
