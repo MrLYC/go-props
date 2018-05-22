@@ -1,0 +1,5 @@
+// SetValue set value
+func (t *T) SetValue(value struct {v1, v2 int; v3 string; v4 *string;  string}) { t.value = value }
+
+// Value return value
+func (t *T) Value() struct {v1, v2 int; v3 string; v4 *string;  string} { return t.value }

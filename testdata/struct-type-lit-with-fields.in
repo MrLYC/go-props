@@ -1,0 +1,12 @@
+package simba
+
+type B struct {}
+
+type T struct {
+	value struct {
+		v1, v2 int
+		v3 string
+		v4 *string
+		string
+	} `props:"+"`
+}

@@ -74,6 +74,18 @@ func GetExprTypeLit(expr ast.Expr) string {
 		return fmt.Sprintf("interface{}")
 	case *ast.FuncType:
 		return GetFuncTypeLit(typ)
+	case *ast.StructType:
+		fields := make([]string, 0)
+		if typ.Fields != nil {
+			for _, f := range typ.Fields.List {
+				names := make([]string, 0)
+				for _, n := range f.Names {
+					names = append(names, n.Name)
+				}
+				fields = append(fields, fmt.Sprintf("%s %s", strings.Join(names, ", "), GetExprTypeLit(f.Type)))
+			}
+		}
+		return fmt.Sprintf("struct {%v}", strings.Join(fields, "; "))
 	}
 	panic(fmt.Errorf("parse expr type failed at %v: %s%+v", expr.Pos(), reflect.TypeOf(expr).String(), expr))
 }
