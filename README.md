@@ -1,5 +1,6 @@
-# go-props
 ![logo](https://cdn.rawgit.com/MrLYC/go-props/master/logo/default.svg)
+
+# go-props
 [![Build Status](https://travis-ci.org/MrLYC/go-props.svg?branch=master)](https://travis-ci.org/MrLYC/go-props)
 [![Golang Version](https://img.shields.io/badge/golang-1.7,1.8,1.9-brightgreen.svg?longCache=true)](https://travis-ci.org/MrLYC/go-props)
 
