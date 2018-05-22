@@ -10,9 +10,11 @@ Running it then should be as simple as:
 
 ```console
 $ make
-$ ./bin/go-props
+$ ./bin/go-props -h
 ```
 
 ### Testing
 
-``make test``
+```console
+$ make test
+```
