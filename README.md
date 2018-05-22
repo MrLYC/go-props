@@ -1,8 +1,8 @@
-[![logo](https://cdn.rawgit.com/MrLYC/go-props/master/logo/default.svg)](https://travis-ci.org/MrLYC/go-props)
+[![logo](https://cdn.rawgit.com/MrLYC/go-props/master/logo/default.svg)](https://github.com/MrLYC/go-props)
 
 # go-props
 [![Build Status](https://travis-ci.org/MrLYC/go-props.svg?branch=master)](https://travis-ci.org/MrLYC/go-props)
-[![Golang Version](https://img.shields.io/badge/golang-1.7,1.8,1.9-brightgreen.svg?longCache=true)](https://travis-ci.org/MrLYC/go-props)
+[![Golang Version](https://img.shields.io/badge/golang-1.7,1.8,1.9-brightgreen.svg?longCache=true)](https://github.com/MrLYC/go-props)
 
 go properties code generator.
 
