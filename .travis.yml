@@ -6,7 +6,7 @@ go:
     - 1.9
 
 before_script:
-    - make initz
+    - make init
 
 script:
     - make lint
