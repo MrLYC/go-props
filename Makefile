@@ -5,7 +5,7 @@ APPNAME = go-props
 GODIR = /tmp/gopath
 SRCDIR = ${GODIR}/src/${APPNAME}
 TARGET = bin/${APPNAME}
-TESTDATA = testdata
+TESTDATA = ${ROOTDIR}/testdata
 
 GOENV = GOPATH=${GODIR}:${GOPATH} GO15VENDOREXPERIMENT=1
 
@@ -32,7 +32,7 @@ update: ${SRCDIR}
 
 .PHONY: test
 test: ${SRCDIR} build
-	python ${TESTDATA}/driven.py -v
+	env PROPS_TARGET=${TARGET} PROPS_TESTDATA=${TESTDATA} python ${TESTDATA}/driven.py -v
 
 .PHONY: lint
 lint:
