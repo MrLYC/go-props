@@ -9,12 +9,12 @@ import (
 
 var getterTemplateStr = `
 // {{.FuncName}} return {{.FieldName}}
-func ({{.Receiver}} *{{.StructName}}) {{.FuncName}}() {{.ToTypePrefix}}{{.FieldType}} { return {{.XToTypePrefix}}{{.Receiver}}.{{.FieldName}} }
+func ({{.Receiver}} *{{.StructName}}) {{.FuncName}}() {{.PackingPrefix}}{{.FieldType}} { return {{.UnpackingPrefix}}{{.Receiver}}.{{.FieldName}} }
 `
 
 var setterTemplateStr = `
 // {{.FuncName}} set {{.FieldName}}
-func ({{.Receiver}} *{{.StructName}}) {{.FuncName}}(value {{.FromTypePrefix}}{{.FieldType}}) { {{.Receiver}}.{{.FieldName}} = {{.FromTypePrefix}}value }
+func ({{.Receiver}} *{{.StructName}}) {{.FuncName}}(value {{.PackingPrefix}}{{.FieldType}}) { {{.Receiver}}.{{.FieldName}} = {{.UnpackingPrefix}}value }
 `
 
 // PropertyGenerator :
@@ -24,10 +24,8 @@ type PropertyGenerator struct {
 	Receiver        string
 	FuncName        string
 	FieldType       string
-	FromTypePrefix  string
-	XFromTypePrefix string
-	ToTypePrefix    string
-	XToTypePrefix   string
+	PackingPrefix   string
+	UnpackingPrefix string
 
 	template *template.Template
 }
@@ -49,19 +47,15 @@ func (p *PropertyGenerator) Generate() string {
 }
 
 // NewPropertyGenerator :
-func NewPropertyGenerator(f *StructFieldDecl, s *StructDecl, fn string, temp *template.Template) *PropertyGenerator {
-	fromPrefix := f.Options.MustGet(FromTag)
-	toPrefix := f.Options.MustGet(ToTag)
+func NewPropertyGenerator(f *StructFieldDecl, s *StructDecl, fn string, packing string, unpacking string, temp *template.Template) *PropertyGenerator {
 	return &PropertyGenerator{
 		FieldName:       f.Name,
 		StructName:      s.Name,
 		Receiver:        strings.ToLower(GetFirstChar(s.Name)),
 		FuncName:        fn,
 		FieldType:       f.Type,
-		FromTypePrefix:  strings.Replace(fromPrefix, "x", "*", -1),
-		XFromTypePrefix: strings.Replace(fromPrefix, "x", "&", -1),
-		ToTypePrefix:    strings.Replace(toPrefix, "x", "*", -1),
-		XToTypePrefix:   strings.Replace(toPrefix, "x", "&", -1),
+		PackingPrefix:   packing,
+		UnpackingPrefix: unpacking,
 		template:        temp,
 	}
 }
@@ -82,8 +76,9 @@ func NewGetter(f *StructFieldDecl, s *StructDecl) Generator {
 		log.Printf("%v.%v getter has been declared", f.Struct.Name, f.Name)
 		return &NotingGenerator{}
 	}
+	packing := f.Options.MustGet(ToTag)
 	return NewPropertyGenerator(
-		f, s, fn, temp,
+		f, s, fn, packing, strings.Replace(packing, "*", "&", -1), temp,
 	)
 }
 
@@ -102,7 +97,8 @@ func NewSetter(f *StructFieldDecl, s *StructDecl) Generator {
 		log.Printf("%v.%v setter has been declared", f.Struct.Name, f.Name)
 		return &NotingGenerator{}
 	}
+	packing := f.Options.MustGet(FromTag)
 	return NewPropertyGenerator(
-		f, s, fn, temp,
+		f, s, fn, packing, packing, temp,
 	)
 }
