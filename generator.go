@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"sort"
 	"strings"
 )
 
@@ -21,6 +22,8 @@ func (g *NotingGenerator) Generate() string {
 
 // Property :
 type Property struct {
+	Struct *StructDecl
+	Field  *StructFieldDecl
 	Getter Generator
 	Setter Generator
 }
@@ -28,6 +31,8 @@ type Property struct {
 // NewProperty :
 func NewProperty(f *StructFieldDecl, s *StructDecl) *Property {
 	return &Property{
+		Struct: s,
+		Field:  f,
 		Getter: NewGetter(f, s),
 		Setter: NewSetter(f, s),
 	}
@@ -39,6 +44,33 @@ type PropertyManager struct {
 	Properties []*Property
 }
 
+// Len :
+func (p *PropertyManager) Len() int {
+	return len(p.Properties)
+}
+
+// Swap :
+func (p *PropertyManager) Swap(i int, j int) {
+	p.Properties[i], p.Properties[j] = p.Properties[j], p.Properties[i]
+}
+
+// Less :
+func (p *PropertyManager) Less(i int, j int) bool {
+	pi := p.Properties[i]
+	pj := p.Properties[j]
+
+	val := strings.Compare(pi.Struct.Name, pj.Struct.Name)
+	if val == 0 {
+		val = strings.Compare(pi.Field.Name, pj.Field.Name)
+	}
+	return val < 0
+}
+
+// Sort :
+func (p *PropertyManager) Sort() {
+	sort.Sort(p)
+}
+
 // Generate :
 func (p *PropertyManager) Generate() string {
 	var code string
@@ -46,6 +78,7 @@ func (p *PropertyManager) Generate() string {
 	if Config.Package != "" {
 		codeList = append(codeList, fmt.Sprintf("package %v\n", Config.Package))
 	}
+	p.Sort()
 	for _, property := range p.Properties {
 		codes := []string{
 			property.Setter.Generate(),

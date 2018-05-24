@@ -1,0 +1,8 @@
+package simba
+
+type T struct {
+	b int `props:"+"`
+	c int `props:"+"`
+	a int `props:"+"`
+	d int `props:"+"`
+}
