@@ -7,6 +7,7 @@ go:
 
 before_script:
     - make init
+    - go get github.com/golang/lint/golint
 
 script:
     - make lint
