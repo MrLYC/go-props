@@ -7,15 +7,17 @@ SRCDIR = ${GODIR}/src/${APPNAME}
 TARGET = bin/${APPNAME}
 TESTDATA = ${ROOTDIR}/testdata
 
-GOENV = GOPATH=${GODIR}:${GOPATH} GO15VENDOREXPERIMENT=1
+GO15VENDOREXPERIMENT = 1
 
-GO = ${GOENV} go
-DEP = ${GOENV} dep
+GO = cd ${SRCDIR} && go
+DEP = cd ${SRCDIR} && dep
 
 LDFLAGS = 
 
+.PHONY: .EXPORT_ALL_VARIABLES
+
 .PHONY: build
-build: ${SRCDIR}
+build: ${SRCDIR} .EXPORT_ALL_VARIABLES
 	${GO} build -i -ldflags="${LDFLAGS}" -o ${TARGET} ${APPNAME}
 
 ${SRCDIR}:
@@ -27,17 +29,17 @@ ${SRCDIR}:
 init: ${SRCDIR} update
 
 .PHONY: update
-update: ${SRCDIR}
-	cd ${SRCDIR} && ${DEP} ensure || true
+update: ${SRCDIR} .EXPORT_ALL_VARIABLES
+	${DEP} ensure || true
 
 .PHONY: test
-test: ${SRCDIR} build
-	env PROPS_TARGET=${TARGET} PROPS_TESTDATA=${TESTDATA} python ${TESTDATA}/driven.py -v
+test: ${SRCDIR} build .EXPORT_ALL_VARIABLES
+	python ${TESTDATA}/driven.py -v
 
 .PHONY: lint
-lint:
+lint: .EXPORT_ALL_VARIABLES
 	${GOENV} find . -type f -name "*.go" -not -path "./vendor/*" -exec golint {} \;
 
 .PHONY: go-env
-go-env:
+go-env: .EXPORT_ALL_VARIABLES
 	@go env

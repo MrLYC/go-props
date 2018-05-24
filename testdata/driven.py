@@ -9,8 +9,8 @@ from subprocess import check_output, Popen, PIPE
 
 
 class TestParser(unittest.TestCase):
-    target = os.getenv("PROPS_TARGET", "./bin/go-props")
-    testdata = os.getenv("PROPS_TESTDATA", "testdata")
+    target = os.getenv("TARGET", "./bin/go-props")
+    testdata = os.getenv("TESTDATA", "testdata")
 
     def gen_code(self, file):
         return check_output([self.target, "-f", file], shell=False).strip()
