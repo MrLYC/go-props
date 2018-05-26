@@ -1,23 +1,23 @@
-// SetC set c
-func (t *T) SetC(value int) { t.c = value }
-
-// C return c
-func (t *T) C() int { return t.c }
-
 // SetA set a
 func (t *T) SetA(value int) { t.a = value }
 
 // A return a
 func (t *T) A() int { return t.a }
 
-// SetD set d
-func (t *T) SetD(value int) { t.d = value }
-
-// D return d
-func (t *T) D() int { return t.d }
-
 // SetB set b
 func (t *T) SetB(value int) { t.b = value }
 
 // B return b
 func (t *T) B() int { return t.b }
+
+// SetC set c
+func (t *T) SetC(value int) { t.c = value }
+
+// C return c
+func (t *T) C() int { return t.c }
+
+// SetD set d
+func (t *T) SetD(value int) { t.d = value }
+
+// D return d
+func (t *T) D() int { return t.d }
