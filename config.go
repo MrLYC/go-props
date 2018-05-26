@@ -23,6 +23,7 @@ type ConfigType struct {
 	TagName string
 
 	WithLog bool
+	Sort    bool
 }
 
 // Config : global config
@@ -56,6 +57,7 @@ func ParseConfig() error {
 
 	flag.BoolVar(&(Config.WithLog), "v", false, "with log")
 	flag.BoolVar(&(Config.WithLog), "with_log", false, "with log")
+	flag.BoolVar(&(Config.Sort), "sort", false, "sort")
 
 	flag.Parse()
 

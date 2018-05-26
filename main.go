@@ -30,6 +30,9 @@ func main() {
 	}
 
 	log.Printf("preparing")
-	gen := parser.Prepare()
-	fmt.Println(gen.Generate())
+	manager := parser.Prepare()
+	if Config.Sort {
+		manager.Sort()
+	}
+	fmt.Println(manager.Generate())
 }

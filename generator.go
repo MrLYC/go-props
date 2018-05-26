@@ -78,7 +78,6 @@ func (p *PropertyManager) Generate() string {
 	if Config.Package != "" {
 		codeList = append(codeList, fmt.Sprintf("package %v\n", Config.Package))
 	}
-	p.Sort()
 	for _, property := range p.Properties {
 		codes := []string{
 			property.Setter.Generate(),
@@ -96,7 +95,7 @@ func (p *PropertyManager) Generate() string {
 }
 
 // NewPropertyManager :
-func NewPropertyManager(parser *Parser) Generator {
+func NewPropertyManager(parser *Parser) *PropertyManager {
 	properties := make([]*Property, 0)
 	for _, s := range parser.Structs {
 		if Config.WithoutPrivateStruct && !s.IsPublic() {

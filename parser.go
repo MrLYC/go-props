@@ -89,7 +89,7 @@ func (p *Parser) ParseFile(path string) error {
 }
 
 // Prepare :
-func (p *Parser) Prepare() Generator {
+func (p *Parser) Prepare() *PropertyManager {
 	return NewPropertyManager(p)
 }
 
